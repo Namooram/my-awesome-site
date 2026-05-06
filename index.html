@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Alien</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Star field */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(1px 1px at 10% 15%, #fff 0%, transparent 100%),
+        radial-gradient(1px 1px at 25% 40%, #aaf 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 40% 10%, #fff 0%, transparent 100%),
+        radial-gradient(1px 1px at 55% 60%, #fff 0%, transparent 100%),
+        radial-gradient(1px 1px at 70% 20%, #ccf 0%, transparent 100%),
+        radial-gradient(2px 2px at 80% 70%, #fff 0%, transparent 100%),
+        radial-gradient(1px 1px at 90% 35%, #aef 0%, transparent 100%),
+        radial-gradient(1px 1px at 15% 75%, #fff 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 60% 85%, #fff 0%, transparent 100%),
+        radial-gradient(1px 1px at 35% 90%, #aaf 0%, transparent 100%),
+        radial-gradient(1px 1px at 5%  50%, #fff 0%, transparent 100%),
+        radial-gradient(1px 1px at 95% 55%, #fff 0%, transparent 100%),
+        radial-gradient(1px 1px at 48% 48%, #ddf 0%, transparent 100%),
+        radial-gradient(2px 2px at 22% 22%, #fff 0%, transparent 100%),
+        radial-gradient(1px 1px at 75% 90%, #aef 0%, transparent 100%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .scene {
+      perspective: 900px;
+      perspective-origin: 50% 45%;
+      position: fixed;
+      z-index: 1;
+    }
+
+    .alien-wrap {
+      animation: turntable 6s ease-in-out infinite;
+      transform-style: preserve-3d;
+      transform-origin: center center;
+      filter: drop-shadow(0 0 30px rgba(100,255,160,0.35))
+              drop-shadow(0 0 80px rgba(80,220,140,0.18));
+    }
+
+    @keyframes turntable {
+      0%   { transform: rotateY(0deg)   rotateX(4deg); }
+      50%  { transform: rotateY(180deg) rotateX(-4deg); }
+      100% { transform: rotateY(360deg) rotateX(4deg); }
+    }
+
+    /* Ambient glow pulse */
+    .glow-ring {
+      position: fixed;
+      width: 340px;
+      height: 340px;
+      border-radius: 50%;
+      background: radial-gradient(ellipse at center,
+        rgba(80,255,150,0.12) 0%,
+        rgba(40,180,100,0.06) 40%,
+        transparent 70%);
+      animation: pulse 3s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 0;
+      transform: translate(-50%, -50%);
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.7; transform: translate(-50%, -50%) scale(1); }
+      50%       { opacity: 1;   transform: translate(-50%, -50%) scale(1.12); }
+    }
+  </style>
+</head>
+<body>
+  <div class="glow-ring"></div>
+
+  <div class="scene">
+    <div class="alien-wrap">
+      <svg xmlns="http://www.w3.org/2000/svg"
+           viewBox="0 0 260 340" width="340" height="440">
+        <defs>
+
+          <!-- Head base gradient: lit from upper-left -->
+          <radialGradient id="headGrad" cx="38%" cy="30%" r="65%">
+            <stop offset="0%"   stop-color="#c8e8b8"/>
+            <stop offset="35%"  stop-color="#96c484"/>
+            <stop offset="70%"  stop-color="#5e8e52"/>
+            <stop offset="100%" stop-color="#2e4e28"/>
+          </radialGradient>
+
+          <!-- Ear gradient -->
+          <radialGradient id="earGrad" cx="40%" cy="35%" r="60%">
+            <stop offset="0%"   stop-color="#a8d098"/>
+            <stop offset="100%" stop-color="#3a6030"/>
+          </radialGradient>
+
+          <!-- Neck gradient -->
+          <radialGradient id="neckGrad" cx="35%" cy="30%" r="70%">
+            <stop offset="0%"   stop-color="#b0d8a0"/>
+            <stop offset="100%" stop-color="#3a5e32"/>
+          </radialGradient>
+
+          <!-- Eye base: deep dark with greenish inner light -->
+          <radialGradient id="eyeGrad" cx="35%" cy="35%" r="65%">
+            <stop offset="0%"   stop-color="#162c18"/>
+            <stop offset="45%"  stop-color="#0a1a0c"/>
+            <stop offset="100%" stop-color="#020602"/>
+          </radialGradient>
+
+          <!-- Eye iris shimmer -->
+          <radialGradient id="irisGrad" cx="40%" cy="40%" r="55%">
+            <stop offset="0%"   stop-color="#1e4020"/>
+            <stop offset="100%" stop-color="#050e05"/>
+          </radialGradient>
+
+          <!-- Specular gloss on head -->
+          <radialGradient id="gloss" cx="32%" cy="22%" r="40%">
+            <stop offset="0%"   stop-color="rgba(255,255,255,0.45)"/>
+            <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+          </radialGradient>
+
+          <!-- Subsurface scatter edge -->
+          <radialGradient id="scatter" cx="50%" cy="50%" r="50%">
+            <stop offset="70%"  stop-color="rgba(0,0,0,0)"/>
+            <stop offset="100%" stop-color="rgba(20,60,16,0.55)"/>
+          </radialGradient>
+
+          <!-- Drop shadow filter -->
+          <filter id="softShadow" x="-30%" y="-20%" width="160%" height="160%">
+            <feDropShadow dx="6" dy="10" stdDeviation="12"
+                          flood-color="#000" flood-opacity="0.6"/>
+          </filter>
+
+          <!-- Eye glow filter -->
+          <filter id="eyeGlow" x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur stdDeviation="3" result="blur"/>
+            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+          </filter>
+
+          <!-- Skin texture filter (subtle noise) -->
+          <filter id="skinFilter" x="0%" y="0%" width="100%" height="100%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3"
+                          seed="8" result="noise"/>
+            <feColorMatrix type="saturate" values="0" in="noise" result="grayNoise"/>
+            <feBlend in="SourceGraphic" in2="grayNoise" mode="multiply" result="blend"/>
+            <feComposite in="blend" in2="SourceGraphic" operator="in"/>
+          </filter>
+
+          <!-- Clip for head shape -->
+          <clipPath id="headClip">
+            <ellipse cx="130" cy="135" rx="95" ry="118"/>
+          </clipPath>
+
+        </defs>
+
+        <!-- ══════════════════════════════════ -->
+        <!--  NECK                              -->
+        <!-- ══════════════════════════════════ -->
+        <ellipse cx="130" cy="272" rx="22" ry="36"
+                 fill="url(#neckGrad)" filter="url(#softShadow)"/>
+        <!-- neck shadow under chin -->
+        <ellipse cx="130" cy="248" rx="28" ry="8"
+                 fill="rgba(0,0,0,0.35)"/>
+
+        <!-- ══════════════════════════════════ -->
+        <!--  HEAD (base shape)                 -->
+        <!-- ══════════════════════════════════ -->
+        <ellipse cx="130" cy="135" rx="95" ry="118"
+                 fill="url(#headGrad)" filter="url(#softShadow)"/>
+
+        <!-- Sub-surface rim scatter (darkens edges for depth) -->
+        <ellipse cx="130" cy="135" rx="95" ry="118"
+                 fill="url(#scatter)"/>
+
+        <!-- ══════════════════════════════════ -->
+        <!--  SKIN TEXTURE overlay              -->
+        <!-- ══════════════════════════════════ -->
+        <ellipse cx="130" cy="135" rx="95" ry="118"
+                 fill="url(#headGrad)" filter="url(#skinFilter)" opacity="0.18"/>
+
+        <!-- ══════════════════════════════════ -->
+        <!--  EAR BUMPS                         -->
+        <!-- ══════════════════════════════════ -->
+        <ellipse cx="36"  cy="148" rx="13" ry="20"
+                 fill="url(#earGrad)" filter="url(#softShadow)"/>
+        <ellipse cx="224" cy="148" rx="13" ry="20"
+                 fill="url(#earGrad)" filter="url(#softShadow)"/>
+
+        <!-- ══════════════════════════════════ -->
+        <!--  CRANIAL VEINS (subtle)            -->
+        <!-- ══════════════════════════════════ -->
+        <g opacity="0.22" clip-path="url(#headClip)">
+          <path d="M130 25 C118 55 112 85 115 105"
+                stroke="#4a7040" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+          <path d="M130 25 C142 55 148 85 145 105"
+                stroke="#4a7040" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+          <path d="M82  42 C90  68 100 88 108 105"
+                stroke="#4a7040" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+          <path d="M178 42 C170 68 160 88 152 105"
+                stroke="#4a7040" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+        </g>
+
+        <!-- ══════════════════════════════════ -->
+        <!--  LEFT EYE                          -->
+        <!-- ══════════════════════════════════ -->
+        <g transform="rotate(-18 80 158)">
+          <!-- eye socket depression -->
+          <ellipse cx="80" cy="158" rx="42" ry="28"
+                   fill="rgba(0,0,0,0.4)"/>
+          <!-- eye base -->
+          <ellipse cx="80" cy="158" rx="38" ry="25"
+                   fill="url(#eyeGrad)" filter="url(#eyeGlow)"/>
+          <!-- iris ring -->
+          <ellipse cx="80" cy="158" rx="22" ry="15"
+                   fill="url(#irisGrad)"/>
+          <!-- pupil -->
+          <ellipse cx="80" cy="158" rx="12" ry="10"
+                   fill="#000"/>
+          <!-- primary specular -->
+          <ellipse cx="68" cy="148" rx="7" ry="4.5"
+                   fill="rgba(200,255,210,0.55)"/>
+          <!-- secondary micro-glint -->
+          <ellipse cx="88" cy="165" rx="3" ry="2"
+                   fill="rgba(180,255,200,0.25)"/>
+          <!-- inner glow rim -->
+          <ellipse cx="80" cy="158" rx="38" ry="25"
+                   fill="none" stroke="rgba(60,180,80,0.25)" stroke-width="2"/>
+        </g>
+
+        <!-- ══════════════════════════════════ -->
+        <!--  RIGHT EYE                         -->
+        <!-- ══════════════════════════════════ -->
+        <g transform="rotate(18 180 158)">
+          <ellipse cx="180" cy="158" rx="42" ry="28"
+                   fill="rgba(0,0,0,0.4)"/>
+          <ellipse cx="180" cy="158" rx="38" ry="25"
+                   fill="url(#eyeGrad)" filter="url(#eyeGlow)"/>
+          <ellipse cx="180" cy="158" rx="22" ry="15"
+                   fill="url(#irisGrad)"/>
+          <ellipse cx="180" cy="158" rx="12" ry="10"
+                   fill="#000"/>
+          <ellipse cx="168" cy="148" rx="7" ry="4.5"
+                   fill="rgba(200,255,210,0.55)"/>
+          <ellipse cx="188" cy="165" rx="3" ry="2"
+                   fill="rgba(180,255,200,0.25)"/>
+          <ellipse cx="180" cy="158" rx="38" ry="25"
+                   fill="none" stroke="rgba(60,180,80,0.25)" stroke-width="2"/>
+        </g>
+
+        <!-- ══════════════════════════════════ -->
+        <!--  NOSE SLITS                        -->
+        <!-- ══════════════════════════════════ -->
+        <ellipse cx="122" cy="205" rx="5" ry="8"
+                 fill="#3a5e30" opacity="0.85"/>
+        <ellipse cx="138" cy="205" rx="5" ry="8"
+                 fill="#3a5e30" opacity="0.85"/>
+        <!-- nostril highlight -->
+        <ellipse cx="120" cy="202" rx="2" ry="1.5"
+                 fill="rgba(180,240,160,0.3)"/>
+        <ellipse cx="136" cy="202" rx="2" ry="1.5"
+                 fill="rgba(180,240,160,0.3)"/>
+
+        <!-- ══════════════════════════════════ -->
+        <!--  MOUTH                             -->
+        <!-- ══════════════════════════════════ -->
+        <path d="M100 228 Q130 236 160 228"
+              stroke="#3a5e30" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <!-- mouth line highlight -->
+        <path d="M102 226 Q130 233 158 226"
+              stroke="rgba(140,210,120,0.2)" stroke-width="1.5"
+              fill="none" stroke-linecap="round"/>
+
+        <!-- ══════════════════════════════════ -->
+        <!--  SPECULAR GLOSS on cranium         -->
+        <!-- ══════════════════════════════════ -->
+        <ellipse cx="130" cy="135" rx="95" ry="118"
+                 fill="url(#gloss)"/>
+
+        <!-- secondary highlight streak -->
+        <ellipse cx="92" cy="72" rx="18" ry="28"
+                 fill="rgba(255,255,255,0.12)"
+                 transform="rotate(-30 92 72)"/>
+
+      </svg>
+    </div>
+  </div>
+  <script>
+    const scene    = document.querySelector('.scene');
+    const glowRing = document.querySelector('.glow-ring');
+
+    const W = 340, H = 440; // alien bounding box
+
+    let x  = Math.random() * (window.innerWidth  - W);
+    let y  = Math.random() * (window.innerHeight - H);
+    let vx = (Math.random() > 0.5 ? 1 : -1) * (2.2 + Math.random() * 1.4);
+    let vy = (Math.random() > 0.5 ? 1 : -1) * (1.8 + Math.random() * 1.4);
+
+    function place() {
+      scene.style.left    = x + 'px';
+      scene.style.top     = y + 'px';
+      glowRing.style.left = (x + W / 2) + 'px';
+      glowRing.style.top  = (y + H / 2) + 'px';
+    }
+
+    function step() {
+      x += vx;
+      y += vy;
+
+      const maxX = window.innerWidth  - W;
+      const maxY = window.innerHeight - H;
+
+      if (x <= 0)    { x = 0;    vx = Math.abs(vx); }
+      if (x >= maxX) { x = maxX; vx = -Math.abs(vx); }
+      if (y <= 0)    { y = 0;    vy = Math.abs(vy); }
+      if (y >= maxY) { y = maxY; vy = -Math.abs(vy); }
+
+      place();
+      requestAnimationFrame(step);
+    }
+
+    // Remove old body flex centering so fixed position works cleanly
+    document.body.style.display = 'block';
+
+    place();
+    requestAnimationFrame(step);
+  </script>
+</body>
+</html>

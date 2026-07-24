@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THE BRAIN HACK — How Games Play YOU</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Nunito:wght@400;700;800;900&display=swap');
+
+  :root{
+    --bg:#0c0f2b;
+    --bg2:#161a45;
+    --card:#1e2358;
+    --stroke:#3b43a8;
+    --yellow:#ffd23f;
+    --pink:#ff3d9a;
+    --cyan:#22e0ff;
+    --purple:#9b5cff;
+    --green:#3dff88;
+    --white:#f4f6ff;
+    --dim:#a3a9de;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+
+  body{
+    font-family:'Nunito',sans-serif;
+    background:
+      radial-gradient(circle at 15% 10%, rgba(155,92,255,.25), transparent 40%),
+      radial-gradient(circle at 85% 20%, rgba(34,224,255,.2), transparent 40%),
+      radial-gradient(circle at 50% 100%, rgba(255,61,154,.2), transparent 45%),
+      var(--bg);
+    color:var(--white);
+    min-height:100vh;
+    padding:24px 16px 60px;
+    overflow-x:hidden;
+  }
+
+  .wrap{max-width:760px;margin:0 auto}
+
+  /* HERO */
+  .hero{
+    text-align:center;
+    padding:28px 18px 34px;
+    position:relative;
+  }
+  .eyebrow{
+    display:inline-block;
+    font-family:'Luckiest Guy',cursive;
+    font-size:14px;
+    letter-spacing:2px;
+    color:var(--bg);
+    background:var(--yellow);
+    padding:6px 16px;
+    border-radius:30px;
+    transform:rotate(-3deg);
+    box-shadow:0 4px 0 #c99e00;
+    margin-bottom:18px;
+  }
+  h1{
+    font-family:'Luckiest Guy',cursive;
+    font-size:clamp(38px,10vw,72px);
+    line-height:.95;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    background:linear-gradient(180deg,#fff 0%,var(--cyan) 60%,var(--purple) 100%);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;
+    filter:drop-shadow(0 4px 0 rgba(0,0,0,.4));
+    margin-bottom:14px;
+  }
+  h1 .pop{
+    display:block;
+    -webkit-text-fill-color:var(--pink);
+    filter:drop-shadow(0 4px 0 #8a0044);
+    transform:rotate(-1.5deg);
+    font-size:1.1em;
+  }
+  .subtitle{
+    font-weight:800;font-size:clamp(15px,4vw,19px);
+    color:var(--dim);max-width:460px;margin:0 auto;
+  }
+
+  /* CARDS */
+  .card{
+    background:linear-gradient(180deg,var(--card),var(--bg2));
+    border:3px solid var(--stroke);
+    border-radius:22px;
+    padding:24px 22px;
+    margin:20px 0;
+    position:relative;
+    box-shadow:0 8px 0 rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.06);
+  }
+  .badge{
+    position:absolute;top:-16px;left:20px;
+    font-family:'Luckiest Guy',cursive;
+    font-size:15px;letter-spacing:1px;
+    padding:6px 14px;border-radius:14px;
+    color:var(--bg);
+    box-shadow:0 4px 0 rgba(0,0,0,.3);
+  }
+  .b1{background:var(--yellow)}
+  .b2{background:var(--pink);color:#fff}
+  .b3{background:var(--cyan)}
+  .card h2{
+    font-family:'Luckiest Guy',cursive;
+    font-size:clamp(22px,6vw,30px);
+    margin:10px 0 12px;
+    letter-spacing:.5px;
+    line-height:1.05;
+  }
+  .card h2 .em{color:var(--yellow)}
+  .card p{font-size:16px;line-height:1.55;color:#dfe2ff;font-weight:600}
+  .card p + p{margin-top:12px}
+  .hl{color:var(--cyan);font-weight:900}
+  .hl-p{color:var(--pink);font-weight:900}
+  .hl-g{color:var(--green);font-weight:900}
+
+  /* VOLUME KNOB — signature interactive */
+  .knob-zone{
+    margin-top:18px;
+    background:rgba(0,0,0,.25);
+    border:2px dashed var(--stroke);
+    border-radius:16px;
+    padding:20px 18px;
+    text-align:center;
+  }
+  .knob-label{font-family:'Luckiest Guy',cursive;font-size:14px;letter-spacing:1px;color:var(--dim);margin-bottom:14px}
+  .hours-readout{
+    font-family:'Luckiest Guy',cursive;
+    font-size:clamp(26px,7vw,36px);
+    color:var(--yellow);
+    margin-bottom:4px;
+    transition:color .2s;
+  }
+  input[type=range]{
+    -webkit-appearance:none;appearance:none;
+    width:100%;max-width:420px;height:16px;
+    border-radius:20px;
+    background:linear-gradient(90deg,var(--green),var(--yellow) 45%,var(--pink));
+    outline:none;margin:14px 0;cursor:pointer;
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;appearance:none;
+    width:34px;height:34px;border-radius:50%;
+    background:#fff;border:4px solid var(--purple);
+    box-shadow:0 3px 8px rgba(0,0,0,.5);cursor:pointer;
+  }
+  input[type=range]::-moz-range-thumb{
+    width:34px;height:34px;border-radius:50%;
+    background:#fff;border:4px solid var(--purple);cursor:pointer;
+  }
+
+  .fun-meter-wrap{margin-top:16px;text-align:left;max-width:460px;margin-left:auto;margin-right:auto}
+  .fun-row{display:flex;align-items:center;gap:10px;margin:9px 0}
+  .fun-name{width:130px;font-weight:800;font-size:14px;color:#cfd3ff;flex-shrink:0}
+  .fun-bar{flex:1;height:18px;border-radius:12px;background:rgba(255,255,255,.08);overflow:hidden}
+  .fun-fill{height:100%;border-radius:12px;transition:width .25s ease, background .25s}
+  .verdict{
+    margin-top:16px;
+    font-family:'Luckiest Guy',cursive;
+    font-size:clamp(16px,4.5vw,20px);
+    line-height:1.2;
+    min-height:26px;
+  }
+
+  /* LANDMINE (bad-feelings card visual) */
+  .laundry{
+    margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center;
+  }
+  .sock{
+    background:rgba(0,0,0,.3);border:2px solid var(--stroke);
+    border-radius:12px;padding:10px 14px;font-weight:800;font-size:14px;
+    color:#cfd3ff;
+  }
+  .sock span{filter:grayscale(.2)}
+
+  /* FINAL CALL TO ACTION */
+  .final{
+    text-align:center;
+    background:linear-gradient(135deg,var(--pink),var(--purple));
+    border:3px solid #fff;
+    border-radius:24px;
+    padding:30px 24px;
+    margin-top:28px;
+    box-shadow:0 10px 0 rgba(0,0,0,.35);
+  }
+  .final h2{
+    font-family:'Luckiest Guy',cursive;
+    font-size:clamp(24px,7vw,38px);
+    line-height:1.05;
+    margin-bottom:12px;
+    text-shadow:0 3px 0 rgba(0,0,0,.3);
+  }
+  .final p{font-size:17px;font-weight:800;max-width:440px;margin:0 auto;color:#fff}
+  .final .big{
+    display:block;margin-top:16px;
+    font-family:'Luckiest Guy',cursive;
+    font-size:clamp(18px,5vw,24px);
+    color:var(--yellow);
+    text-shadow:0 2px 0 rgba(0,0,0,.35);
+  }
+
+  .foot{text-align:center;margin-top:26px;color:var(--dim);font-size:13px;font-weight:700}
+
+  @media (prefers-reduced-motion:no-preference){
+    .eyebrow{animation:wob 3s ease-in-out infinite}
+    @keyframes wob{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(2deg)}}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <div class="eyebrow">⚡ SECRET INTEL ⚡</div>
+    <h1>The Brain Hack<span class="pop">Games Use on YOU</span></h1>
+    <p class="subtitle">Games are fun. But smart people are literally paid to make it hard for you to stop. Here's the cheat code they're running.</p>
+  </div>
+
+  <!-- CARD 1 -->
+  <div class="card">
+    <div class="badge b1">HACK 01 · THE REWARD PING</div>
+    <h2>They control your <span class="em">"feel good" button</span></h2>
+    <p>Your brain fires a chemical called <span class="hl">dopamine</span> when you win, level up, or crack a loot box. It's supposed to reward you for stuff that's actually good for you.</p>
+    <p>Game designers figured out how to hit that button <span class="hl-p">on purpose</span>. The victory sound, the flash, the "+1 tier" — that's them aiming straight at your reward button. They even tune the difficulty: too easy = boring, too hard = you quit. They aim for <span class="hl-g">just hard enough to keep you hooked</span>. That's someone's actual job.</p>
+  </div>
+
+  <!-- CARD 2 -->
+  <div class="card">
+    <div class="badge b2">HACK 02 · THE VOLUME TRICK</div>
+    <h2>They make <span class="em">everything else boring</span></h2>
+    <p>Here's the part nobody warns you about. When your brain gets blasted with feel-good chemical for hours, it turns the <span class="hl">volume down</span> to protect itself.</p>
+    <p>So after a few hours you're not even having fun — you're just in zombie mode, still playing. And now normal stuff feels <span class="hl-p">boring</span>, because your brain lowered the volume on <em>everything</em>. Drag the knob and watch what happens 👇</p>
+
+    <div class="knob-zone">
+      <div class="knob-label">🎮 HOURS PLAYED TODAY</div>
+      <div class="hours-readout" id="hoursOut">1 HOUR</div>
+      <input type="range" id="knob" min="0" max="8" value="1" step="1" aria-label="Hours played today">
+      <div class="fun-meter-wrap">
+        <div class="fun-row">
+          <div class="fun-name">🎮 Gaming</div>
+          <div class="fun-bar"><div class="fun-fill" id="funGame" style="width:90%;background:var(--green)"></div></div>
+        </div>
+        <div class="fun-row">
+          <div class="fun-name">📚 Reading</div>
+          <div class="fun-bar"><div class="fun-fill" id="funRead" style="width:60%;background:var(--cyan)"></div></div>
+        </div>
+        <div class="fun-row">
+          <div class="fun-name">⚽ Hanging out</div>
+          <div class="fun-bar"><div class="fun-fill" id="funFriends" style="width:70%;background:var(--purple)"></div></div>
+        </div>
+      </div>
+      <div class="verdict" id="verdict">Everything still feels good. Nice.</div>
+    </div>
+  </div>
+
+  <!-- CARD 3 -->
+  <div class="card">
+    <div class="badge b3">HACK 03 · THE HIDING SPOT</div>
+    <h2>They help you <span class="em">hide from bad feelings</span></h2>
+    <p>Games are also great at making stress vanish for a while — a test you're dreading, a fight with a friend. That feels like relief.</p>
+    <p>But it's like shoving dirty laundry under the bed instead of washing it. The mess is <span class="hl-p">still there</span> — you just stopped dealing with it. And the more you hide from it, the worse you get at handling it.</p>
+    <div class="laundry">
+      <div class="sock"><span>😰</span> That test</div>
+      <div class="sock"><span>😬</span> The argument</div>
+      <div class="sock"><span>😴</span> Being tired</div>
+      <div class="sock"><span>🫥</span> Still there tomorrow</div>
+    </div>
+  </div>
+
+  <!-- FINAL -->
+  <div class="final">
+    <h2>This isn't "games are evil"</h2>
+    <p>Games are genuinely fun and there's nothing wrong with playing. The real move is this:</p>
+    <span class="big">If YOU can put it down when you want → you win.<br>If the game won't let you go → the game's winning.</span>
+  </div>
+
+  <p class="foot">Don't let them play you. 🎯</p>
+
+</div>
+
+<script>
+  const knob = document.getElementById('knob');
+  const hoursOut = document.getElementById('hoursOut');
+  const funGame = document.getElementById('funGame');
+  const funRead = document.getElementById('funRead');
+  const funFriends = document.getElementById('funFriends');
+  const verdict = document.getElementById('verdict');
+
+  const verdicts = [
+    "Brain's fresh. Everything sounds fun.",
+    "Everything still feels good. Nice.",
+    "Still solid. You're in the sweet spot.",
+    "Hmm... other stuff starting to feel 'meh'.",
+    "Volume dropping. Reading feels boring now.",
+    "Zombie mode loading... even gaming's fading.",
+    "Nothing feels fun anymore. Not even the game.",
+    "Full zombie. Bored by everything. Trapped.",
+    "The volume's basically muted. This is the trap."
+  ];
+
+  function clamp(n){return Math.max(4,Math.min(100,n));}
+
+  function update(){
+    const h = parseInt(knob.value,10);
+    hoursOut.textContent = h + (h===1 ? " HOUR" : " HOURS");
+
+    // Gaming fun: peaks early then tolerance kills it
+    const game = clamp(90 - Math.max(0, h-2)*15);
+    // Other activities: brain turns the volume down as hours climb
+    const read = clamp(60 - h*8);
+    const friends = clamp(70 - h*7);
+
+    funGame.style.width = game + "%";
+    funRead.style.width = read + "%";
+    funFriends.style.width = friends + "%";
+
+    // color shift as things get grim
+    const grim = h >= 4;
+    funGame.style.background = h>=6 ? 'var(--pink)' : 'var(--green)';
+    funRead.style.background = read < 30 ? 'var(--pink)' : 'var(--cyan)';
+    funFriends.style.background = friends < 30 ? 'var(--pink)' : 'var(--purple)';
+
+    hoursOut.style.color = h>=6 ? 'var(--pink)' : (grim ? '#ff8fbf' : 'var(--yellow)');
+    verdict.textContent = verdicts[h];
+    verdict.style.color = h>=6 ? 'var(--pink)' : (grim ? 'var(--yellow)' : 'var(--green)');
+  }
+
+  knob.addEventListener('input', update);
+  update();
+</script>
+</body>
+</html>

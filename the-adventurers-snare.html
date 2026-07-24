@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Adventurer's Snare</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;900&family=Crimson+Pro:ital,wght@0,400;0,500;0,600;1,400&family=EB+Garamond:ital@0;1&display=swap');
+
+  :root{
+    --stone:#14110d;
+    --stone2:#1c1813;
+    --parch:#d8c9a8;
+    --parch-dim:#b9a887;
+    --ink:#e8dcc0;
+    --ink-dim:#a89975;
+    --ember:#c9662b;
+    --ember-bright:#e8843f;
+    --gold:#c9a24b;
+    --blood:#7d2b23;
+    --sickgreen:#5f6b3a;
+    --arcane:#5a6b8c;
+    --edge:#3a3025;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+
+  html{scroll-behavior:smooth}
+
+  body{
+    font-family:'Crimson Pro',Georgia,serif;
+    background:
+      radial-gradient(ellipse at 50% -5%, rgba(201,102,43,.16), transparent 45%),
+      radial-gradient(ellipse at 15% 40%, rgba(90,107,140,.08), transparent 40%),
+      radial-gradient(ellipse at 85% 75%, rgba(125,43,35,.12), transparent 45%),
+      var(--stone);
+    color:var(--ink);
+    min-height:100vh;
+    padding:0 0 80px;
+    line-height:1.6;
+  }
+
+  /* subtle stone texture via layered gradients */
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(0,0,0,.15) 0 1px, transparent 1px 3px),
+      repeating-linear-gradient(90deg, rgba(0,0,0,.08) 0 1px, transparent 1px 4px);
+    opacity:.35;
+  }
+
+  .wrap{max-width:720px;margin:0 auto;padding:0 22px;position:relative;z-index:1}
+
+  /* HERO */
+  .hero{text-align:center;padding:64px 12px 40px}
+  .rune{
+    font-family:'Cinzel',serif;font-size:13px;letter-spacing:6px;
+    color:var(--ember);text-transform:uppercase;margin-bottom:22px;
+    opacity:.85;
+  }
+  .flame{
+    font-size:46px;line-height:1;margin-bottom:14px;
+    filter:drop-shadow(0 0 18px rgba(232,132,63,.6));
+    animation:flicker 3.2s ease-in-out infinite;
+  }
+  @keyframes flicker{
+    0%,100%{opacity:1;transform:translateY(0) scale(1)}
+    45%{opacity:.82;transform:translateY(1px) scale(.97)}
+    70%{opacity:.95;transform:translateY(-1px) scale(1.02)}
+  }
+  h1{
+    font-family:'Cinzel',serif;font-weight:900;
+    font-size:clamp(34px,8vw,60px);line-height:1.02;
+    color:var(--parch);letter-spacing:1px;
+    text-shadow:0 2px 20px rgba(0,0,0,.7);
+    margin-bottom:18px;
+  }
+  h1 .sub{
+    display:block;font-size:.42em;font-weight:600;letter-spacing:3px;
+    color:var(--ember);margin-top:14px;font-style:italic;
+    font-family:'Crimson Pro',serif;
+  }
+  .dek{
+    font-size:clamp(17px,3.4vw,20px);color:var(--ink-dim);
+    max-width:520px;margin:8px auto 0;font-style:italic;
+  }
+  .divider{
+    width:200px;height:22px;margin:34px auto 0;
+    background:
+      radial-gradient(circle at center, var(--gold) 0 2px, transparent 2px),
+      linear-gradient(90deg, transparent, var(--edge) 20%, var(--edge) 80%, transparent);
+    background-size:100% 2px, 100% 1px;
+    background-repeat:no-repeat;
+    background-position:center 10px, center;
+    position:relative;
+  }
+  .divider::before,.divider::after{
+    content:"◆";position:absolute;top:2px;color:var(--gold);font-size:15px;
+  }
+  .divider::before{left:calc(50% - 5px)}
+  .divider::after{display:none}
+
+  /* PREAMBLE */
+  .preamble{
+    font-size:19px;color:var(--parch);text-align:center;
+    max-width:560px;margin:34px auto 10px;
+  }
+  .preamble b{color:var(--ember-bright);font-weight:600}
+
+  /* ENCHANTMENT CARDS */
+  .snare{
+    background:
+      linear-gradient(180deg, rgba(40,34,26,.9), rgba(24,20,15,.94));
+    border:1px solid var(--edge);
+    border-left:3px solid var(--ember);
+    border-radius:4px;
+    padding:30px 28px 28px;
+    margin:26px 0;
+    position:relative;
+    box-shadow:0 18px 40px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.03);
+  }
+  .snare-eyebrow{
+    font-family:'Cinzel',serif;font-size:11px;letter-spacing:4px;
+    text-transform:uppercase;color:var(--gold);opacity:.75;
+    display:flex;align-items:center;gap:10px;margin-bottom:6px;
+  }
+  .snare-eyebrow::before{content:"";width:22px;height:1px;background:var(--gold);opacity:.6}
+  .snare h2{
+    font-family:'Cinzel',serif;font-weight:700;
+    font-size:clamp(23px,5vw,30px);color:var(--parch);
+    letter-spacing:.5px;margin-bottom:4px;line-height:1.1;
+  }
+  .snare .whispers{
+    font-style:italic;color:var(--ember-bright);font-size:18px;
+    margin-bottom:16px;opacity:.92;
+  }
+  .snare p{font-size:17.5px;color:var(--ink);margin-bottom:13px}
+  .snare p:last-child{margin-bottom:0}
+  .snare .real{color:var(--ink-dim)}
+  .snare b{color:var(--parch);font-weight:600}
+  .snare .cost{
+    margin-top:16px;padding:14px 16px;
+    background:rgba(125,43,35,.16);
+    border-left:2px solid var(--blood);
+    border-radius:3px;
+    font-size:16px;color:#d6b9a8;font-style:italic;
+  }
+  .snare .cost b{color:var(--ember-bright);font-style:normal}
+
+  /* THE DARK CORRIDOR */
+  .corridor{
+    background:linear-gradient(180deg, #0d0b08, #14100b);
+    border:1px solid var(--blood);
+    border-radius:4px;
+    padding:32px 28px;
+    margin:44px 0 26px;
+    position:relative;
+    box-shadow:0 0 60px rgba(0,0,0,.6) inset, 0 18px 40px rgba(0,0,0,.5);
+  }
+  .corridor .torch{text-align:center;font-size:26px;margin-bottom:6px;opacity:.6}
+  .corridor h2{
+    font-family:'Cinzel',serif;font-weight:900;text-align:center;
+    font-size:clamp(22px,5vw,30px);color:var(--blood);
+    letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;
+    text-shadow:0 0 18px rgba(125,43,35,.5);
+  }
+  .corridor .sub{text-align:center;font-style:italic;color:var(--ink-dim);margin-bottom:20px;font-size:16px}
+  .corridor p{font-size:17px;color:#cbb8a0;margin-bottom:13px}
+  .corridor b{color:var(--parch)}
+  .corridor .redact{color:var(--ember-bright);font-weight:600}
+  .corridor .rule{
+    margin:18px 0;padding:14px 18px;
+    background:rgba(0,0,0,.4);border:1px dashed var(--edge);border-radius:3px;
+    font-size:16px;color:var(--ink-dim);font-style:italic;text-align:center;
+  }
+
+  /* THE WAY OUT */
+  .wayout{
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(201,162,75,.14), transparent 60%),
+      linear-gradient(180deg, rgba(38,34,24,.95), rgba(24,22,15,.96));
+    border:1px solid var(--gold);
+    border-radius:4px;
+    padding:36px 30px;
+    margin:44px 0 20px;
+    text-align:center;
+    box-shadow:0 18px 50px rgba(0,0,0,.5), inset 0 1px 0 rgba(201,162,75,.15);
+  }
+  .wayout .sigil{font-size:30px;margin-bottom:10px;filter:drop-shadow(0 0 14px rgba(201,162,75,.5))}
+  .wayout h2{
+    font-family:'Cinzel',serif;font-weight:700;
+    font-size:clamp(22px,5vw,30px);color:var(--gold);
+    letter-spacing:1px;margin-bottom:16px;
+  }
+  .wayout p{font-size:18px;color:var(--parch);max-width:520px;margin:0 auto 14px}
+  .wayout p:last-child{margin-bottom:0}
+  .wayout b{color:var(--ember-bright);font-weight:600}
+  .wayout .oath{
+    margin-top:22px;font-family:'Cinzel',serif;font-size:17px;
+    color:var(--ink);letter-spacing:1px;line-height:1.5;font-weight:600;
+  }
+  .wayout .oath em{color:var(--gold);font-style:normal}
+
+  footer{text-align:center;margin-top:40px;color:var(--ink-dim);font-style:italic;font-size:15px;opacity:.7}
+
+  @media (prefers-reduced-motion:reduce){
+    .flame{animation:none}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="rune">✦ A Field Guide for the Ones Left Waiting ✦</div>
+    <div class="flame">🔥</div>
+    <h1>The Adventurer's Snare
+      <span class="sub">why your child no longer wants to leave the dungeon</span>
+    </h1>
+    <p class="dek">It was never just a game. It's a place that gives them three things the waking world keeps taking away — and understanding the spell is the first step to breaking it.</p>
+    <div class="divider"></div>
+  </header>
+
+  <p class="preamble">The last chapter was chemistry — dopamine, tolerance, the wiring. This one is deeper. Games hold your child not because they feel good, but because they quietly satisfy <b>three needs every human carries</b>, sharpest of all in the teenage years. Real life is failing to meet them. The game never fails.</p>
+
+  <!-- SNARE 1 -->
+  <section class="snare">
+    <div class="snare-eyebrow">The First Enchantment</div>
+    <h2>The Rigged Triumph</h2>
+    <div class="whispers">"Here, you always win in the end."</div>
+    <p>We're built for the hero's road — set out, face the trial, return victorious. It's the same force that makes an infant stand up after the hundredth fall. Psychologists call it <b>intent to mastery</b>, and it's carved into us.</p>
+    <p class="real">The world offers triumph too — but at a brutal price and no guarantee. Train for the Olympics for years and never make the team. The game strips out the risk: tuned <b>just</b> hard enough to feel earned, yet rigged so you always break through. And the ones caught hardest are often the bright kids from striving homes, who find school too dull to bother with.</p>
+    <div class="cost"><b>The cost:</b> a triumph the mind can't tell from the real thing — so the fire to achieve anything in the waking world quietly goes out.</div>
+  </section>
+
+  <!-- SNARE 2 -->
+  <section class="snare">
+    <div class="snare-eyebrow">The Second Enchantment</div>
+    <h2>The Chosen Face</h2>
+    <div class="whispers">"Out here, be whoever you wish."</div>
+    <p>Identity isn't something we're born holding — it's built across all of childhood, and in the teen years it's raw and half-formed, exactly when a kid first grasps that others hold <b>lasting opinions</b> of them. Hence the anxiety, the cliques, the sudden war over sneakers and hair.</p>
+    <p class="real">The waking world assigns them a face — the acne, the glasses, the awkwardness. The world online lets them <b>choose</b> one: respected, feared, ripped in a single click, first on the board. And every hour poured into that chosen self, the real one fades further back — so they fall behind, so they lean in harder.</p>
+    <div class="cost"><b>The cost:</b> the true self is left to wither in the dark, until the invented one is all they have left to stand on.</div>
+  </section>
+
+  <!-- SNARE 3 -->
+  <section class="snare">
+    <div class="snare-eyebrow">The Third Enchantment · the strongest binding</div>
+    <h2>The Fellowship at the Other End of the Line</h2>
+    <div class="whispers">"We are always here. We never move away."</div>
+    <p>This is the deepest hook, and the one most parents mistake for a toy. Games are where a child finds their <b>people</b> — the ones who moved, switched schools, or never found their footing in a crowded room.</p>
+    <p class="real">These bonds are real. A friendship struck over a game can outlast every hallway friend — a voice at the other end of the line for a decade, present through every version of who your child becomes. So when you pull the plug for the weekend, understand what you've actually done:</p>
+    <div class="cost"><b>You didn't confiscate a game. You marched their whole fellowship out the gate.</b> That is why the resistance is so fierce — you'd fight too, if someone barred you from everyone you love for a weekend.</div>
+  </section>
+
+  <!-- THE DARK CORRIDOR -->
+  <section class="corridor">
+    <div class="torch">🕯️</div>
+    <h2>The Dark Corridor</h2>
+    <div class="sub">every judgment-free hall has a shadow at the far end</div>
+    <p>The same anonymity that shelters your child from judgment strips accountability from everyone else in the hall. People don't turn cruel for lack of morals — they turn cruel when there's <b>opportunity</b> and no one to name them. Bandits wear masks for a reason.</p>
+    <p>On the playground you'd have crossed the field in seconds to reach a ring of grown strangers circling your child. In this hall you simply <span class="redact">cannot see them</span> — and among the voices are ones too vile to set down here. Groomers. Predators. And the language, sexual and racist and merciless, has no PG wing to hide in.</p>
+    <div class="rule">One father put on his ten-year-old's headphones and heard a grown man of twenty-six telling his boy to go f— himself. Understand too: your child may be the one speaking it.</div>
+    <p>Your first instinct will be to seal the gate. It is the wrong move — it breeds only anger, resentment, and silence between you. <b>The goal is not to keep them from the water. It's to teach them to swim the shark-lanes.</b></p>
+  </section>
+
+  <!-- THE WAY OUT -->
+  <section class="wayout">
+    <div class="sigil">⚜️</div>
+    <h2>The Only Way Through</h2>
+    <p>You cannot simply take the fellowship away. You have to <b>build another one</b> — a real-world hall where they feel challenged, seen, connected, and, above all, where they like who they are.</p>
+    <p>Do it <b>with</b> them, not to them. Build it together and the whole thing flips: you stop being the one who confiscates, and become the one on their side. That is the alliance. That is what makes them willing, at last, to loosen their grip on the other world.</p>
+    <div class="oath">Do not seal the gate.<br>Walk in beside them — and <em>light the way out together.</em></div>
+  </section>
+
+  <footer>— from the field notes of those who went in after their children, and brought them back —</footer>
+
+</div>
+</body>
+</html>
